@@ -38,6 +38,7 @@ import org.apache.maven.artifact.deployer.ArtifactDeploymentException;
 import org.apache.maven.artifact.metadata.ArtifactMetadata;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.apache.maven.model.License;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -205,6 +206,14 @@ public class DeployFileMojo
      */
     @Parameter( property = "files" )
     private String files;
+    
+    
+    /**
+     * Collection of licenses to include in the generated default Pom.  Licenses are retrieved from the &lt;licenses&gt 
+     * element of the POM file.
+     */
+    @Parameter( property = "licenses" )
+    private List<License> licenses;
 
     void initProperties()
         throws MojoExecutionException
@@ -624,6 +633,8 @@ public class DeployFileMojo
         model.setPackaging( packaging );
 
         model.setDescription( description );
+        
+        model.setLicenses( licenses );
 
         return model;
     }
@@ -686,5 +697,15 @@ public class DeployFileMojo
     void setClassifier( String classifier )
     {
         this.classifier = classifier;
+    }
+    
+    List<License> getLicenses()
+    {
+    	return licenses;
+    }
+    
+    void setLicenses ( List<License> licenses)
+    {
+    	this.licenses = licenses;
     }
 }

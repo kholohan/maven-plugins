@@ -31,6 +31,7 @@ import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -41,6 +42,7 @@ import org.apache.maven.artifact.installer.ArtifactInstallationException;
 import org.apache.maven.artifact.metadata.ArtifactMetadata;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.apache.maven.model.License;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -169,6 +171,15 @@ public class InstallFileMojo
      */
     @Parameter( property = "localRepositoryPath" )
     private File localRepositoryPath;
+    
+    /**
+     * Collection of licenses to include in the generated default Pom.  Licenses are retrieved from the &lt;licenses&gt 
+     * element of the POM file.
+     * 
+     * @since 2.5
+     */
+    @Parameter( property = "licenses" )
+    private List<License> licenses;
 
     /**
      * The component used to validate the user-supplied artifact coordinates.
@@ -500,6 +511,8 @@ public class InstallFileMojo
         model.setPackaging( packaging );
 
         model.setDescription( "POM was created from install:install-file" );
+        
+        model.setLicenses( licenses );
 
         return model;
     }
@@ -551,6 +564,16 @@ public class InstallFileMojo
     public void setLocalRepositoryPath( File theLocalRepositoryPath )
     {
         this.localRepositoryPath = theLocalRepositoryPath;
+    }
+    
+    List<License> getLicenses()
+    {
+    	return licenses;
+    }
+    
+    void setLicenses ( List<License> licenses)
+    {
+    	this.licenses = licenses;
     }
 
 }
